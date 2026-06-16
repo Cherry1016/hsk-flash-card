@@ -12,7 +12,7 @@ function getBookmarks() {
     return [] as string[];
   }
   try {
-    const raw = localStorage.getItem("flashcard-bookmarks-old-5");
+    const raw = localStorage.getItem("flashcard-bookmarks");
     return raw ? (JSON.parse(raw) as string[]) : [];
   } catch {
     return [];

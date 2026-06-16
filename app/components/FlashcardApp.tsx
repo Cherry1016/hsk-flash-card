@@ -23,10 +23,7 @@ const allCards = vocabData as unknown as VocabEntry[];
 export default function FlashcardApp() {
   const allLevels = useMemo(() => getAvailableLevels(allCards), []);
   const defaultLevels = useMemo(
-    () =>
-      allLevels.includes("old-5")
-        ? ["old-5"]
-        : allLevels.length
+    () => allLevels.length
           ? [allLevels[0]]
           : [],
     [allLevels],

@@ -1,9 +1,11 @@
 export interface VocabEntry {
   simplified: string;
-  pinyin: string;
   level?: string[];
   forms?: Array<{
     meanings?: string[];
+    transcriptions?: {
+      pinyin?: string;
+    };
   }>;
 }
 
@@ -27,7 +29,7 @@ export function getAvailableLevels(cards: VocabEntry[]) {
 }
 
 export function getPinyin(entry: VocabEntry): string {
-  return entry.pinyin || "";
+  return entry.forms?.[0]?.transcriptions?.pinyin ?? '';
 }
 
 export function getMeanings(entry: VocabEntry): string[] {
