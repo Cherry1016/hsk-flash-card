@@ -5,7 +5,7 @@ import Link from "next/link";
 import vocabData from "../const/complete.json";
 import { getPinyin, VocabEntry } from "../components/flashcardUtils";
 
-const allCards = vocabData as VocabEntry[];
+const allCards = vocabData as unknown as VocabEntry[];
 
 function getBookmarks() {
   if (typeof window === "undefined") {
@@ -124,7 +124,7 @@ export default function BookmarkPage() {
                     </div>
                     <div className="mt-4 space-y-2 text-slate-600">
                       {(entry.forms?.[0]?.meanings ?? []).map(
-                        (meaning, idx) => (
+                        (meaning: string, idx: number) => (
                           <div key={idx}>{meaning}</div>
                         ),
                       )}

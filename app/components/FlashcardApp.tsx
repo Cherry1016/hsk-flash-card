@@ -19,8 +19,7 @@ import SummaryModal from "./SummaryModal";
 import { StudyMode, GuessStatus } from "./flashcardTypes";
 import { useAppShell } from "./AppShellContext";
 
-const allCards = vocabData as VocabEntry[];
-
+const allCards = vocabData as unknown as VocabEntry[];
 export default function FlashcardApp() {
   const allLevels = useMemo(() => getAvailableLevels(allCards), []);
   const defaultLevels = useMemo(
@@ -43,7 +42,7 @@ export default function FlashcardApp() {
   const sessionStorageKey = "flashcard-session";
 
   const [order, setOrder] = useState<number[]>(() =>
-    filterByLevels(allCards, defaultLevels).map((_, index) => index),
+    filterByLevels(allCards, defaultLevels).map((_: VocabEntry, index: number) => index),
   );
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -71,7 +70,7 @@ export default function FlashcardApp() {
       return new Set();
     }
   });
-  const { drawerOpen, setDrawerOpen, mode, setMode } = useAppShell();
+  const { mode, setMode } = useAppShell();
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [sessionStarted, setSessionStarted] = useState(false);
   const [cardsViewed, setCardsViewed] = useState<Set<number>>(new Set());
@@ -131,7 +130,7 @@ export default function FlashcardApp() {
           Array.isArray(parsed.order) &&
           parsed.order.length === restoredCards.length
             ? parsed.order
-            : restoredCards.map((_, i) => i);
+            : restoredCards.map((_: VocabEntry, i: number) => i);
 
         setSelectedLevels(restoredSelectedLevels);
         setOrder(restoredOrder);
@@ -162,7 +161,7 @@ export default function FlashcardApp() {
   useEffect(() => {
     if (!sessionStarted) return;
     const nextCards = filterByLevels(allCards, selectedLevels);
-    setOrder(nextCards.map((_, i) => i));
+    setOrder(nextCards.map((_: VocabEntry, i: number) => i));
     setIndex(0);
     setFlipped(false);
   }, [selectedLevels, sessionStarted]);
@@ -287,7 +286,7 @@ export default function FlashcardApp() {
 
   const startSession = () => {
     setSessionStarted(true);
-    setOrder(filterByLevels(allCards, selectedLevels).map((_, index) => index));
+    setOrder(filterByLevels(allCards, selectedLevels).map((_: VocabEntry, index: number) => index));
     setIndex(0);
     setFlipped(false);
   };
@@ -392,7 +391,6 @@ export default function FlashcardApp() {
           index={index + 1}
           total={order.length}
           knownCount={knownSet.size}
-          onOpenMenu={() => setDrawerOpen(true)}
           onOpenSummary={() => setSummaryOpen(true)}
           onShuffle={shuffle}
         />
@@ -445,6 +443,7 @@ export default function FlashcardApp() {
         hintClickCount={hintClickCount}
         knownToggleCount={knownToggleCount}
         flipCount={flipCount}
+        failedWords={[]}
       />
     </div>
   );

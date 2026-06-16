@@ -9,7 +9,7 @@ import React, {
 
 interface StudyContextValue {
   selectedLevels: string[];
-  setSelectedLevels: (levels: string[]) => void;
+  setSelectedLevels: (levels: string[] | ((prev: string[]) => string[])) => void;
 }
 
 const StudyContext = createContext<StudyContextValue | null>(null);
@@ -17,8 +17,14 @@ const StudyContext = createContext<StudyContextValue | null>(null);
 export function StudyProvider({ children }: { children: ReactNode }) {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
 
+  const setSelectedLevelsWrapper = (
+    levels: string[] | ((prev: string[]) => string[]),
+  ) => {
+    setSelectedLevels(levels);
+  };
+
   return (
-    <StudyContext.Provider value={{ selectedLevels, setSelectedLevels }}>
+    <StudyContext.Provider value={{ selectedLevels, setSelectedLevels: setSelectedLevelsWrapper }}>
       {children}
     </StudyContext.Provider>
   );

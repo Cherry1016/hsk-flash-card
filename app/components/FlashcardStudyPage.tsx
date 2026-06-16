@@ -16,7 +16,7 @@ import LevelSelectionScreen from "./LevelSelectionScreen";
 import SummaryModal from "./SummaryModal";
 import { useStudy } from "./StudyContext";
 
-const allCards = vocabData as VocabEntry[];
+const allCards = vocabData as unknown as VocabEntry[];
 
 export default function FlashcardStudyPage() {
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function FlashcardStudyPage() {
   const sessionStorageKey = "flashcard-session-flashcard";
 
   const [order, setOrder] = useState<number[]>(() =>
-    filterByLevels(allCards, defaultLevels).map((_, index) => index),
+    filterByLevels(allCards, defaultLevels).map((_: VocabEntry, index: number) => index),
   );
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -131,7 +131,7 @@ export default function FlashcardStudyPage() {
           Array.isArray(parsed.order) &&
           parsed.order.length === restoredCards.length
             ? parsed.order
-            : restoredCards.map((_, i) => i);
+            : restoredCards.map((_: VocabEntry, i: number) => i);
 
         setSelectedLevels(restoredSelectedLevels);
         setOrder(restoredOrder);
@@ -162,7 +162,7 @@ export default function FlashcardStudyPage() {
   useEffect(() => {
     if (!sessionStarted) return;
     const nextCards = filterByLevels(allCards, selectedLevels);
-    setOrder(nextCards.map((_, i) => i));
+    setOrder(nextCards.map((_: VocabEntry, i: number) => i));
     setIndex(0);
     setFlipped(false);
   }, [selectedLevels, sessionStarted]);
@@ -246,9 +246,9 @@ export default function FlashcardStudyPage() {
         availableLevels={allLevels}
         selectedLevels={selectedLevels}
         onToggleLevel={(level: string) => {
-          setSelectedLevels((prev) => {
+          setSelectedLevels((prev: string[]) => {
             const next = prev.includes(level)
-              ? prev.filter((item) => item !== level)
+              ? prev.filter((item: string) => item !== level)
               : [...prev, level];
             return next.length === 0 ? prev : next;
           });
@@ -256,7 +256,7 @@ export default function FlashcardStudyPage() {
         onStart={() => {
           setSessionStarted(true);
           setOrder(
-            filterByLevels(allCards, selectedLevels).map((_, index) => index),
+            filterByLevels(allCards, selectedLevels).map((_: VocabEntry, index: number) => index),
           );
           setIndex(0);
           setFlipped(false);

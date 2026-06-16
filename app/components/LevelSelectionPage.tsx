@@ -7,7 +7,7 @@ import { getAvailableLevels, VocabEntry } from "./flashcardUtils";
 import LevelSelectionScreen from "./LevelSelectionScreen";
 import { useStudy } from "./StudyContext";
 
-const allCards = vocabData as VocabEntry[];
+const allCards = vocabData as unknown as VocabEntry[];
 
 export default function LevelSelectionPage() {
   const router = useRouter();
